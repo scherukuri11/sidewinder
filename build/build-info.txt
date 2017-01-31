@@ -1,2 +1,0 @@
-Release Build number:12
-Release Commit number:562b1a054e69dcdccf2869f7d0dad7a99142a7c2
