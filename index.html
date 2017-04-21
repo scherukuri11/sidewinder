@@ -1,8 +1,93 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Sidewinder</title>
+<title>Sidewinder</title>
+<link rel="icon" type="image/png" href="./styles/imgs/logo.png">
+<link rel="stylesheet" href="./styles/css/bootstrap.min.css">
+
+<script type="text/javascript" src="./styles/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="./styles/js/bootstrap.min.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+  $(document).ready(function(){
+    $('.carousel').carousel({
+      interval: 5000
+    })
+  });
+</script>
+
 </head>
 <body>
-  This is basic sidewinder site
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/"> <img alt="logo"
+          src="./styles/imgs/logo.png" style="width: 20px; float: left">
+          <p style="float: left; margin-top: 2px;">&nbsp;Sidewinder</p>
+        </a>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li class=""><a href="/index.html">Overview</a></li>
+        <li class=""><a href="https://github.com/srotya/sidewinder/releases">Download</a></li>
+        <li class=""><a href="https://github.com/srotya/sidewinder/wiki">Docs</a></li>
+        <li class=""><a href="https://github.com/srotya/sidewinder/wiki/Contribution-Guide">Contribute</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container"
+		style="padding-top: 60px; margin: 0 auto; width: 80%" role="main">
+    <div id="my_carousel" class="carousel slide">
+
+      <ol class="carousel-indicators">
+        <li data-target = "#my_carousel" data-slide-to = "0" class="active"></li>
+        <li data-target = "#my_carousel" data-slide-to = "1"></li>
+        <li data-target = "#my_carousel" data-slide-to = "2"></li>
+      </ol>
+
+      <div class="carousel-inner i">
+
+        <div class="item active">
+          <img src="./content/slide1.png" alt = "i1" class="img-responsive">
+        </div>
+
+        <div class="item">
+          <img src="./content/slide2.png" alt = "i2" class="img-responsive">
+        </div>
+
+        <div class="item">
+          <img src="./content/slide3.png" alt = "i3" class="img-responsive">
+        </div>
+
+      </div>
+
+      <a class="carousel-control left" href="#my_carousel" data-slide = "prev">
+        <span class="icon-prev left"></span>
+      </a>
+
+      <a class="carousel-control right" href="#my_carousel" data-slide = "next">
+        <span class="icon-next right"></span>
+      </a>
+    </div>
+
+    <div style="padding-top:30px">
+      Sidewinder is a timeseries database designed for speed and scalability.
+      It's purpose is to provide storage, retrieval and analysis for time series data in near real-time.
+      It can be used to power dashboards and real-time correlations for time series data at scale for use cases like IoT (Internet of Things), Application Metrics and Analytics.
+
+
+      <br/><br/><br/><br/>
+        <center>
+          <div style="font-size:6pt; color:#d4d7db">
+            Grafana Logo Copyright 2014-2016 Torkel Ödegaard, Raintank Inc.<br/>
+            Sidewinder Copyright 2016-2017 Ambud Sharma
+          </div>
+        </center>
+    </div>
+
+  </div>
+
+
 </body>
 </html>
