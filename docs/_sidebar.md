@@ -1,0 +1,15 @@
+<!-- docs/_sidebar.md -->
+
+- [Home](/)
+- [Basics](/basics/)
+  - [Usage](/basics/usage.md)
+- [Integrations](/integrations)
+  - [Writes](/integrations/writes.md)
+  - [Reads](/integrations/reads.md)
+  - [Queries](/integrations/queries.md)
+  - [Collectors](/integrations/collectors.md)
+- [Deployments](/deployment/)
+  - [Install](/deployment/install.md)
+  - [Configure](/deployment/config.md)
+- [Designs](/designs/)
+  - [Compression](/designs/compression.md)

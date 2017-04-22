@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sidewinder | Download</title>
+<link rel="icon" type="image/png" href="../styles/imgs/logo.png">
+<link rel="stylesheet" href="../styles/css/bootstrap.min.css">
+
+<script type="text/javascript" src="../styles/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../styles/js/bootstrap.min.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101962299-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://sidewinder.srotya.com"> <img alt="logo"
+          src="../styles/imgs/logo.png" style="width: 20px; float: left">
+          <p style="float: left; margin-top: 2px;">&nbsp;Sidewinder</p>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li class=""><a href="../">Overview</a></li>
+          <li class=""><a href=".">Download</a></li>
+          <li class=""><a href="../docs/">Docs</a></li>
+          <li class=""><a href="../integrations/">Integrations</a></li>
+          <li class=""><a href="../license/">License</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container"
+		style="padding-top: 60px; margin: 0 auto; width: 80%" role="main">
+
+    <h2>Download</h2>
+
+    <h4>RPMs</h4>
+    Latest Sidewinder RPMs can be downloaded from Maven central e.g. <a href="http://search.maven.org/remotecontent?filepath=com/srotya/sidewinder/sidewinder-core/">http://search.maven.org/remotecontent?filepath=com/srotya/sidewinder/sidewinder-core/0.x.x/sidewinder-core-0.x.x.rpm</a>
+
+    <h4>DEBs</h4>
+    Latest Sidewinder RPMs can be downloaded from Maven central e.g. <a href="http://search.maven.org/remotecontent?filepath=com/srotya/sidewinder/sidewinder-core/">http://search.maven.org/remotecontent?filepath=com/srotya/sidewinder/sidewinder-core/0.0.18/sidewinder-core-0.x.x.deb</a>
+
+    <h4>Docker</h4>
+    Official docker image for Sidewinder can be located on Docker Hub: <a href="https://hub.docker.com/r/srotya/sidewinder/tags/">https://hub.docker.com/r/srotya/sidewinder/tags/</a>
+
+    <h2>Install</h2>
+    Sidewinder can be installed in one of several different ways depending on the environment your are deploying.
+    <br/>
+    <h3>Pre-requisite</h3>
+    Sidewinder requires Java 8 (Oracle or OpenJDK) which can be installed using:
+    <br/><br/>
+    <ol>
+      <li>sudo yum install java (Centos 7)</li>
+      <li>sudo apt-get install openjdk-8-jre (Debian)</li>
+      <li>Oracle JRE: <a href="http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html">Download</a></li>
+    </ol>
+
+    <h3>Centos 6/7</h3>
+
+    To install simply run <code>sudo rpm -ivf sidewinder-core-0.x.x.rpm</code><br/>
+
+    To upgrade simply run <code>sudo rpm -Uv sidewinder-core-0.x.x.rpm</code>
+
+    <h3>Debian</h3>
+    To install simply run <code>sudo dpkg -i sidewinder-core-0.x.x.deb</code>
+
+    <h2>Config</h2>
+    When using package installation, configuration for Sidewinder is located in the <code>/etc/sidewinder</code> folder with the config.yaml file and sidewinder.properties file with necessary configuration files.
+
+    <h2>Run</h2>
+    The latest Sidewinder packages (RPM & DEB) also install a Linux service for it which can be run using the
+
+    <code>sudo service sidewinder start</code> and logs to <code>/var/log/sidewinder.log</code>
+    <br/><br/><br/><br/>
+      <center>
+        <div style="font-size:8pt; color:#d4d7db">
+          Copyright 2016-2017 Ambud Sharma
+        </div>
+        <div style="font-size:6pt; color:#d4d7db">
+          Grafana Logo Copyright 2014-2016 Torkel Ödegaard, Raintank Inc.<br/>
+        </div>
+      </center>
+  </div>
+
+
+</body>
+</html>

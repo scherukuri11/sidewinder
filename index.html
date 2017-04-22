@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <title>Sidewinder</title>
 <link rel="icon" type="image/png" href="./styles/imgs/logo.png">
@@ -7,6 +7,17 @@
 
 <script type="text/javascript" src="./styles/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="./styles/js/bootstrap.min.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101962299-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
 
 <script language="JavaScript" type="text/javascript">
   $(document).ready(function(){
@@ -34,10 +45,11 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav navbar-right">
-          <li class=""><a href="http://sidewinder.srotya.com">Overview</a></li>
-          <li class=""><a href="https://github.com/srotya/sidewinder/releases">Download</a></li>
-          <li class=""><a href="https://github.com/srotya/sidewinder/wiki">Docs</a></li>
-          <li class=""><a href="https://github.com/srotya/sidewinder/wiki/Contribution-Guide">Contribute</a></li>
+          <li class=""><a href=".">Overview</a></li>
+          <li class=""><a href="./download/">Download</a></li>
+          <li class=""><a href="./docs/">Docs</a></li>
+          <li class=""><a href="./integrations/">Integrations</a></li>
+          <li class=""><a href="./license/">License</a></li>
         </ul>
       </div>
     </div>
@@ -78,21 +90,74 @@
       </a>
     </div>
 
-    <div style="padding-top:30px">
-      Sidewinder is a timeseries database designed for speed and scalability.
-      It's purpose is to provide storage, retrieval and analysis for time series data in near real-time.
-      It can be used to power dashboards and real-time correlations for time series data at scale. Sidewinder was designed for IoT (Internet of Things), Application Metrics and Analytics.
-
-
-      <br/><br/><br/><br/>
-        <center>
-          <div style="font-size:6pt; color:#d4d7db">
-            Grafana Logo Copyright 2014-2016 Torkel Ödegaard, Raintank Inc.<br/>
-            Sidewinder Copyright 2016-2017 Ambud Sharma
-          </div>
-        </center>
+    <div style="padding-top:10px">
+      <center>
+        <button class="btn" onclick="window.location.href='./docs/gettingstarted/'">Getting Started</button>
+        <button class="btn" onclick="window.location.href='./download/'">Download</button>
+      </center>
+      <hr/>
+      <h3>Features</h3>
+      <div class="row" style="text-align:center;">
+        <div class="col-sm-4 padfeature">
+          <h4>Persistent</h4>
+          <img src="./styles/imgs/glyphicons-528-database.png" /><br/>
+          Memory mapped writes to disk<br/><br/><br/>
+        </div>
+        <div class="col-sm-4 padfeature">
+          <h4>Fast</h4>
+          <img src="./styles/imgs/glyphicons-422-send.png" /><br/>
+          Upto ~2 million writes per second per node<br/><br/><br/>
+        </div>
+        <div class="col-sm-4 padfeature">
+          <h4>Tools</h4>
+          <img src="./styles/imgs/glyphicons-42-charts.png" /><br/>
+          Official Grafana Data Source for visualizing<br/><br/><br/>
+        </div>
+        <div class="col-sm-4 padfeature">
+          <h4>Collectors</h4>
+          <img src="./styles/imgs/glyphicons-772-satellite-dish.png" /><br/>
+          Support for Collectd, Telegraf etc.<br/><br/><br/>
+        </div>
+        <div class="col-sm-4 padfeature">
+          <h4>REST</h4>
+          <img src="./styles/imgs/glyphicons-464-server.png" /><br/>
+          REST Api for programmatics data access<br/><br/><br/>
+        </div>
+        <div class="col-sm-4 padfeature">
+          <h4>Clustering</h4>
+          <img src="./styles/imgs/glyphicons-309-share-alt.png" /><br/>
+          Clustering for scaling and fault tolerance<br/><br/><br/>
+        </div>
+      </div>
+      <hr/>
+      <h3>News</h3>
+      <div class="row">
+        <div class="col-sm-4">
+          <h4>Release 0.0.22</h4>
+          TS Query Language &amp; Bug fixes and configurations
+          <a href="https://github.com/srotya/sidewinder/releases/tag/sidewinder-parent-0.0.22">more...</a>
+        </div>
+        <div class="col-sm-4">
+          <h4>Release 0.0.21</h4>
+          Disk Persistence &amp; Basic Clustering Released
+          <a href="https://github.com/srotya/sidewinder/releases/tag/sidewinder-parent-0.0.21">more...</a>
+        </div>
+        <div class="col-sm-4">
+          <h4>Basic Clustering Framework</h4>
+          Framework for basic clustering added to Sidewinder
+          <a href="https://github.com/srotya/sidewinder/issues/29">more...</a>
+        </div>
+      </div>
     </div>
-
+    <br/><br/><br/><br/>
+      <center>
+        <div style="font-size:8pt; color:#d4d7db">
+          Copyright 2016-2017 Ambud Sharma
+        </div>
+        <div style="font-size:6pt; color:#d4d7db">
+          Grafana Logo Copyright 2014-2016 Torkel Ödegaard, Raintank Inc.<br/>
+        </div>
+      </center>
   </div>
 
 

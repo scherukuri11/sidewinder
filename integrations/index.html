@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sidewinder | Integrations</title>
+<link rel="icon" type="image/png" href="../styles/imgs/logo.png">
+<link rel="stylesheet" href="../styles/css/bootstrap.min.css">
+
+<script type="text/javascript" src="../styles/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../styles/js/bootstrap.min.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-101962299-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://sidewinder.srotya.com"> <img alt="logo"
+          src="../styles/imgs/logo.png" style="width: 20px; float: left">
+          <p style="float: left; margin-top: 2px;">&nbsp;Sidewinder</p>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav navbar-right">
+          <li class=""><a href="../">Overview</a></li>
+          <li class=""><a href="../download/">Download</a></li>
+          <li class=""><a href="../docs/">Docs</a></li>
+          <li class=""><a href=".">Integrations</a></li>
+          <li class=""><a href="../license/">License</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container"
+		style="padding-top: 60px; margin: 0 auto; width: 80%" role="main">
+    <h2>Integrations</h2>
+    Sidewinder comes with native compatibility with several systems like Grafana, Collectd, Telegraf etc.
+    <br/>
+    <div>
+    <h3>Grafana</h3>
+    <a style="font-size:9pt" href="https://grafana.com/">https://grafana.com/</a><br/>
+    Part of the main Sidewinder project is also a Grafana Data Source for Sidewinder which can be downloaded to enable Grafana to interact with Sidewinder.
+    This plugin is published as a zip and can be downloaded from <a href="https://repo1.maven.org/maven2/com/srotya/sidewinder/sidewinder-grafana">Maven central</a>
+    </div>
+
+    <div>
+    <h3>Collectd</h3>
+    <a style="font-size:9pt" href="https://collectd.org/">https://collectd.org/</a><br/>
+    Sidewinder collectd writer plugin allows metrics captured or aggregated by Collectd to be forwarded to Sidewinder. Just like the Collectd JMX plugin
+    the Sidewinder plugin is also Java based. Please refer to the <a style="font-size:9pt" href="https://github.com/srotya/sidewinder-collectd">Plugin Project</a> for more details.
+    </div>
+
+    <div>
+    <h3>Telegraf</h3>
+    <a style="font-size:9pt" href="https://github.com/influxdata/telegraf">https://github.com/influxdata/telegraf</a><br/>
+    Telegraf is a collection agent by InfluxDB, due to Sidewinder's compatibility with Influx's HTTP wire protocol makes it possible for Telegraf to be used
+    directly with Sidewinder.
+    </div>
+
+    <br/><br/><br/><br/>
+      <center>
+        <div style="font-size:8pt; color:#d4d7db">
+          Copyright 2016-2017 Ambud Sharma
+        </div>
+        <div style="font-size:6pt; color:#d4d7db">
+          Grafana Logo Copyright 2014-2016 Torkel Ödegaard, Raintank Inc.<br/>
+        </div>
+      </center>
+  </div>
+
+
+</body>
+</html>
