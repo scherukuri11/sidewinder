@@ -78,7 +78,7 @@ public class SidewinderClusteredServer extends Application<ClusterConfiguration>
 		connector.init(conf, storageEngine);
 
 		RoutingEngine router = (RoutingEngine) Class.forName(conf.getOrDefault("cluster.routing.engine",
-				"com.srotya.sidewinder.cluster.routing.impl.MasterSlaveRoutingEngine")).newInstance();
+				"com.srotya.sidewinder.cluster.push.routing.impl.MasterSlaveRoutingEngine")).newInstance();
 		router.init(conf, connector);
 
 		final Server server = ServerBuilder.forPort(port)
