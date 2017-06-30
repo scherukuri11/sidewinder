@@ -29,7 +29,7 @@ import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.srotya.sidewinder.cluster.api.InfluxApi;
 import com.srotya.sidewinder.cluster.connectors.ClusterConnector;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
 import com.srotya.sidewinder.cluster.rpc.ClusteredWriteServiceImpl;
 import com.srotya.sidewinder.core.ResourceMonitor;
 import com.srotya.sidewinder.core.SidewinderDropwizardReporter;
@@ -75,11 +75,11 @@ public class SidewinderClusteredServer extends Application<ClusterConfiguration>
 
 		ClusterConnector connector = (ClusterConnector) Class.forName(conf.getOrDefault("cluster.connector",
 				"com.srotya.sidewinder.cluster.connectors.ConfigConnector")).newInstance();
-		connector.init(conf);
+		connector.init(conf, storageEngine);
 
 		RoutingEngine router = (RoutingEngine) Class.forName(conf.getOrDefault("cluster.routing.engine",
 				"com.srotya.sidewinder.cluster.routing.impl.MasterSlaveRoutingEngine")).newInstance();
-		router.init(conf, storageEngine, connector);
+		router.init(conf, connector);
 
 		final Server server = ServerBuilder.forPort(port)
 				.decompressorRegistry(DecompressorRegistry.getDefaultInstance())

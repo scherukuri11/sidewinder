@@ -47,13 +47,14 @@ service ReplicationService {
 message RawTimeSeriesBucketResponse {
 	
 	int64 messageId = 1;
-	string dbName = 2;
-	string measurementName = 3;
-	string valueFieldName = 4;
-	int64 blockTimestamp = 5;
-	bool fp = 6;
-	repeated string tags = 7;
-	repeated Bucket buckets = 8;
+	int32 responseCode = 2;
+	string dbName = 3;
+	string measurementName = 4;
+	string valueFieldName = 5;
+	int64 blockTimestamp = 6;
+	bool fp = 7;
+	repeated string tags = 8;
+	repeated Bucket buckets = 9;
 	
 }
 
@@ -84,18 +85,25 @@ message RawTimeSeriesOffsetRequest {
 
 }
 
+message RawTimeSeriesResponse {
+	
+	
+
+}
+
 message RawTimeSeriesOffsetResponse {
 
 	int64 messageId = 1;
-	string dbName = 2;
-	string measurementName = 3;
-	string valueFieldName = 4;
-	int64 blockTimestamp = 5;
-	int32 timeBucketSize = 6;
-	repeated string tags = 7;
-	bytes data = 8;
-	int32 offset = 9;
-	int64 nextTimestamp = 10;
+	int32 responseCode = 2;
+	string dbName = 3;
+	string measurementName = 4;
+	string valueFieldName = 5;
+	int64 blockTimestamp = 6;
+	int32 timeBucketSize = 7;
+	repeated string tags = 8;
+	bytes data = 9;
+	int32 offset = 10;
+	int64 nextTimestamp = 11;
 
 }
 

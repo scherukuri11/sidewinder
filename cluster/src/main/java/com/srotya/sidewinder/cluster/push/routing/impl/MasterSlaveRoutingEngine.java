@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.srotya.sidewinder.cluster.routing.impl;
+package com.srotya.sidewinder.cluster.push.routing.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,10 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.srotya.sidewinder.cluster.connectors.ClusterConnector;
-import com.srotya.sidewinder.cluster.routing.Node;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.Node;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
 import com.srotya.sidewinder.core.rpc.Point;
-import com.srotya.sidewinder.core.storage.StorageEngine;
 
 /**
  * {@link RoutingEngine} implementation for a Leader Follower design for
@@ -45,8 +44,8 @@ public class MasterSlaveRoutingEngine extends RoutingEngine {
 	}
 
 	@Override
-	public void init(Map<String, String> conf, StorageEngine engine, ClusterConnector connector) {
-		super.init(conf, engine, connector);
+	public void init(Map<String, String> conf, ClusterConnector connector) {
+		super.init(conf, connector);
 		connector.initializeRouterHooks(this);
 	}
 

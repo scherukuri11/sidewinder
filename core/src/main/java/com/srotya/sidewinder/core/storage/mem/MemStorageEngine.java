@@ -122,14 +122,18 @@ public class MemStorageEngine implements StorageEngine {
 							.entrySet()) {
 						String measurement = measurementEntry.getKey();
 						for (Entry<String, TimeSeries> entry : measurementEntry.getValue().entrySet()) {
-							List<TimeSeriesBucket> buckets = entry.getValue().collectGarbage();
-							for (TimeSeriesBucket bucket : buckets) {
-								try {
-									archiver.archive(
-											new TimeSeriesArchivalObject(db, measurement, entry.getKey(), bucket));
-								} catch (ArchiveException e) {
-									e.printStackTrace();
+							try {
+								List<TimeSeriesBucket> buckets = entry.getValue().collectGarbage();
+								for (TimeSeriesBucket bucket : buckets) {
+									try {
+										archiver.archive(
+												new TimeSeriesArchivalObject(db, measurement, entry.getKey(), bucket));
+									} catch (ArchiveException e) {
+										logger.log(Level.SEVERE, "Exception archiving bucket:"+entry.getKey(), e);
+									}
 								}
+							} catch (Exception e) {
+								logger.log(Level.SEVERE, "Exception collecting garbage:"+entry.getKey(), e);
 							}
 						}
 					}

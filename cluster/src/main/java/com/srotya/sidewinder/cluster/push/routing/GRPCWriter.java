@@ -13,43 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.srotya.sidewinder.cluster.routing;
+package com.srotya.sidewinder.cluster.push.routing;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.srotya.sidewinder.core.rpc.Point;
-import com.srotya.sidewinder.core.storage.DataPoint;
-import com.srotya.sidewinder.core.storage.StorageEngine;
+import com.srotya.sidewinder.core.rpc.SingleData;
+import com.srotya.sidewinder.core.rpc.WriterServiceGrpc;
+import com.srotya.sidewinder.core.rpc.WriterServiceGrpc.WriterServiceBlockingStub;
+
+import io.grpc.ManagedChannel;
 
 /**
  * @author ambud
  */
-public class LocalWriter implements Writer {
+public class GRPCWriter implements Writer {
 
-	private StorageEngine engine;
+	private WriterServiceBlockingStub stub;
+	private ManagedChannel channel;
 
-	public LocalWriter(StorageEngine engine) {
-		this.engine = engine;
+	public GRPCWriter(ManagedChannel channel) {
+		this.channel = channel;
+		stub = WriterServiceGrpc.newBlockingStub(channel);
 	}
 
 	@Override
 	public void write(Point point) throws IOException {
-		DataPoint dp = new DataPoint();
-		dp.setDbName(point.getDbName());
-		dp.setFp(point.getFp());
-		dp.setLongValue(point.getValue());
-		dp.setMeasurementName(point.getMeasurementName());
-		dp.setTags(new ArrayList<>(point.getTagsList()));
-		dp.setTimestamp(point.getTimestamp());
-		dp.setValueFieldName(point.getValueFieldName());
-//		System.err.println("Writing dp:" + dp);
-		engine.writeDataPoint(dp);
+		stub.writeSingleDataPoint(SingleData.newBuilder().setMessageId(point.getTimestamp()).setPoint(point).build());
 	}
 
 	@Override
 	public void close() throws IOException {
-		engine.disconnect();
+		if (!channel.isShutdown()) {
+			channel.shutdownNow();
+		}
 	}
 
 }

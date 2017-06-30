@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.srotya.sidewinder.cluster.routing.impl;
+package com.srotya.sidewinder.cluster.push.routing.impl;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,12 +23,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 import com.srotya.sidewinder.cluster.connectors.ClusterConnector;
-import com.srotya.sidewinder.cluster.routing.LocalWriter;
-import com.srotya.sidewinder.cluster.routing.Node;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
-import com.srotya.sidewinder.cluster.routing.RoutingStrategy;
+import com.srotya.sidewinder.cluster.push.routing.LocalWriter;
+import com.srotya.sidewinder.cluster.push.routing.Node;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.RoutingStrategy;
 import com.srotya.sidewinder.core.rpc.Point;
-import com.srotya.sidewinder.core.storage.StorageEngine;
 
 /**
  * @author ambud
@@ -39,14 +38,13 @@ public class ScalingRoutingEngine extends RoutingEngine {
 	private static final String CLUSTER_ROUTING_STRATEGY = "cluster.routing.strategy";
 	private static final Logger logger = Logger.getLogger(RoutingEngine.class.getName());
 	private RoutingStrategy strategy;
-	private StorageEngine engine;
 
 	public ScalingRoutingEngine() {
 	}
 
 	@Override
-	public void init(Map<String, String> conf, StorageEngine engine, ClusterConnector connector) {
-		super.init(conf, engine, connector);
+	public void init(Map<String, String> conf, ClusterConnector connector) {
+		super.init(conf, connector);
 		String strategyClass = conf.getOrDefault(CLUSTER_ROUTING_STRATEGY, DEFAULT_CLUSTER_ROUTING_STRATEGY);
 		logger.info("Using rebalancing strategy:" + strategyClass);
 		try {
@@ -78,12 +76,12 @@ public class ScalingRoutingEngine extends RoutingEngine {
 				String dbName = decodeKey[0];
 				String measurementName = decodeKey[1];
 				try {
-					engine.checkIfExists(dbName, measurementName);
-					Set<String> fields = engine.getFieldsForMeasurement(dbName, measurementName);
+					getEngine().checkIfExists(dbName, measurementName);
+					Set<String> fields = getEngine().getFieldsForMeasurement(dbName, measurementName);
 					for (String field : fields) {
-						List<List<String>> tagsSet = engine.getTagsForMeasurement(dbName, measurementName, field);
+						List<List<String>> tagsSet = getEngine().getTagsForMeasurement(dbName, measurementName, field);
 						for (List<String> tags : tagsSet) {
-							seriesToRawBucket(engine, dbName, measurementName, field, tags);
+							seriesToRawBucket(getEngine(), dbName, measurementName, field, tags);
 						}
 					}
 				} catch (Exception e) {

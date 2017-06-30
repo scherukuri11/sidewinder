@@ -18,6 +18,8 @@ package com.srotya.sidewinder.cluster.api;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
@@ -28,12 +30,11 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.srotya.sidewinder.cluster.routing.Node;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.Node;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
 import com.srotya.sidewinder.core.ingress.http.HTTPDataPointDecoder;
 import com.srotya.sidewinder.core.rpc.Point;
 import com.srotya.sidewinder.core.storage.RejectException;
-import com.srotya.sidewinder.core.utils.MiscUtils;
 
 /**
  * @author ambud
@@ -42,6 +43,7 @@ import com.srotya.sidewinder.core.utils.MiscUtils;
 @Path("/http")
 public class InfluxApi {
 
+	private static final Logger logger = Logger.getLogger(InfluxApi.class.getName());
 	private Meter meter;
 	private RoutingEngine router;
 	private int replicationFactor;
@@ -67,13 +69,14 @@ public class InfluxApi {
 			List<Node> nodes = router.routeData(dp, replicationFactor);
 			for (int i = 0; i < nodes.size(); i++) {
 				Node node = nodes.get(i);
-				System.err.println(MiscUtils.pointToDataPoint(dp)+"\t"+node);
 				try {
 					node.getWriter().write(dp);
 				} catch (IOException e) {
-					if (!(e instanceof RejectException)) {
-						e.printStackTrace();
+					if (e instanceof RejectException) {
+						break;
 					} else {
+						logger.log(Level.SEVERE,
+								"Failed to write data point to node:" + node.getAddress() + ":" + node.getPort(), e);
 						break;
 					}
 				}

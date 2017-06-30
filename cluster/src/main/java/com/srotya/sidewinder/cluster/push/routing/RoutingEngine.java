@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.srotya.sidewinder.cluster.routing;
+package com.srotya.sidewinder.cluster.push.routing;
 
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -45,10 +45,10 @@ public abstract class RoutingEngine {
 	public static final String CLUSTER_HOST = "cluster.host";
 	private int port;
 	private String address;
-	private StorageEngine engine;
+	private ClusterConnector connector;
 
-	public void init(Map<String, String> conf, StorageEngine engine, ClusterConnector connector) {
-		this.engine = engine;
+	public void init(Map<String, String> conf, ClusterConnector connector) {
+		this.connector = connector;
 		this.port = Integer.parseInt(conf.getOrDefault(CLUSTER_GRPC_PORT, DEFAULT_CLUSTER_GRPC_PORT));
 		this.address = conf.getOrDefault(CLUSTER_HOST, DEFAULT_CLUSTER_HOST);
 	}
@@ -90,11 +90,9 @@ public abstract class RoutingEngine {
 	public int getPort() {
 		return port;
 	}
-
-	/**
-	 * @return the engine
-	 */
+	
 	public StorageEngine getEngine() {
-		return engine;
+		return connector.getEngine();
 	}
+
 }

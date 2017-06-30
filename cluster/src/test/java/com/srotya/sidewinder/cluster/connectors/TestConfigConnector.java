@@ -26,8 +26,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.srotya.sidewinder.cluster.routing.Node;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.Node;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
 import com.srotya.sidewinder.core.rpc.Point;
 
 /**
@@ -38,7 +38,7 @@ public class TestConfigConnector {
 	@Test
 	public void testDefaultInit() throws Exception {
 		ConfigConnector connector = new ConfigConnector();
-		connector.init(new HashMap<>());
+		connector.init(new HashMap<>(), null);
 		assertEquals("localhost:55021", connector.getMaster());
 		assertEquals(0, connector.getSlavesList().size());
 	}
@@ -48,7 +48,7 @@ public class TestConfigConnector {
 		ConfigConnector connector = new ConfigConnector();
 		Map<String, String> conf = new HashMap<>();
 		conf.put("cluster.cc.slaves", "192.168.1.1:55021, 192.168.1.2:55021");
-		connector.init(conf);
+		connector.init(conf, null);
 		assertEquals(2, connector.getSlavesList().size());
 	}
 
@@ -57,7 +57,7 @@ public class TestConfigConnector {
 		ConfigConnector connector = new ConfigConnector();
 		Map<String, String> conf = new HashMap<>();
 		conf.put("cluster.cc.slaves", "192.168.1.1:55021, 192.168.1.2:55021");
-		connector.init(conf);
+		connector.init(conf, null);
 		final List<Node> nodes = new ArrayList<>();
 		connector.initializeRouterHooks(new RoutingEngine() {
 
@@ -89,7 +89,7 @@ public class TestConfigConnector {
 		Map<String, String> conf = new HashMap<>();
 		conf.put("cluster.cc.slaves", "192.168.1.1:55a021, 192.168.1.2:55r021");
 		try {
-			connector.init(conf);
+			connector.init(conf, null);
 			fail("Must throw exception");
 		} catch (Exception e) {
 		}

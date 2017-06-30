@@ -19,10 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.srotya.sidewinder.cluster.routing.GRPCWriter;
-import com.srotya.sidewinder.cluster.routing.LocalWriter;
-import com.srotya.sidewinder.cluster.routing.Node;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.GRPCWriter;
+import com.srotya.sidewinder.cluster.push.routing.LocalWriter;
+import com.srotya.sidewinder.cluster.push.routing.Node;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
+import com.srotya.sidewinder.core.storage.StorageEngine;
 
 import io.grpc.CompressorRegistry;
 import io.grpc.ManagedChannel;
@@ -33,19 +34,23 @@ import io.grpc.ManagedChannelBuilder;
  */
 public class ConfigConnector extends ClusterConnector {
 
+	public static final String CLUSTER_CC_SLAVES = "cluster.cc.slaves";
+	public static final String CLUSTER_CC_MASTER = "cluster.cc.master";
 	private List<Node> slavesList;
 	private String master;
 	private boolean isMaster;
+	private StorageEngine engine;
 
 	public ConfigConnector() {
 		slavesList = new ArrayList<>();
 	}
 
 	@Override
-	public void init(Map<String, String> conf) throws Exception {
-		master = conf.getOrDefault("cluster.cc.master", "localhost:55021");
+	public void init(Map<String, String> conf, StorageEngine engine) throws Exception {
+		this.engine = engine;
+		master = conf.getOrDefault(CLUSTER_CC_MASTER, "localhost:55021");
 		isMaster = Boolean.parseBoolean(conf.getOrDefault("cluster.cc.ismaster", "false"));
-		String slaves = conf.get("cluster.cc.slaves");
+		String slaves = conf.get(CLUSTER_CC_SLAVES);
 		if (slaves != null && !slaves.isEmpty()) {
 			String[] splits = slaves.split(",");
 			for (String slave : splits) {
@@ -59,7 +64,7 @@ public class ConfigConnector extends ClusterConnector {
 	public void initializeRouterHooks(RoutingEngine router) {
 		String[] split = master.split(":");
 		Node node = new Node(split[0], Integer.parseInt(split[1]), "");
-		node.setWriter(new LocalWriter(router.getEngine()));
+		node.setWriter(new LocalWriter(engine));
 		router.nodeAdded(node);
 		for (Node slave : slavesList) {
 			ManagedChannel channel = ManagedChannelBuilder.forAddress(slave.getAddress(), slave.getPort())
@@ -85,6 +90,11 @@ public class ConfigConnector extends ClusterConnector {
 
 	public List<Node> getSlavesList() {
 		return slavesList;
+	}
+
+	@Override
+	public StorageEngine getEngine() {
+		return engine;
 	}
 
 }

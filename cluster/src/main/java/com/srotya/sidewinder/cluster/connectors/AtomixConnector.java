@@ -20,10 +20,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-import com.srotya.sidewinder.cluster.routing.GRPCWriter;
-import com.srotya.sidewinder.cluster.routing.LocalWriter;
-import com.srotya.sidewinder.cluster.routing.Node;
-import com.srotya.sidewinder.cluster.routing.RoutingEngine;
+import com.srotya.sidewinder.cluster.push.routing.GRPCWriter;
+import com.srotya.sidewinder.cluster.push.routing.LocalWriter;
+import com.srotya.sidewinder.cluster.push.routing.Node;
+import com.srotya.sidewinder.cluster.push.routing.RoutingEngine;
+import com.srotya.sidewinder.core.storage.StorageEngine;
 
 import io.atomix.AtomixReplica;
 import io.atomix.catalyst.transport.Address;
@@ -47,9 +48,11 @@ public class AtomixConnector extends ClusterConnector {
 	private boolean isBootstrap;
 	private String address;
 	private int port;
+	private StorageEngine engine;
 
 	@Override
-	public void init(Map<String, String> conf) throws Exception {
+	public void init(Map<String, String> conf, StorageEngine engine) throws Exception {
+		this.engine = engine;
 		AtomixReplica.Builder builder = AtomixReplica
 				.builder(new Address(conf.getOrDefault("cluster.atomix.host", "localhost"),
 						Integer.parseInt(conf.getOrDefault("cluster.atomix.port", "8901"))));
@@ -81,13 +84,13 @@ public class AtomixConnector extends ClusterConnector {
 	}
 
 	@Override
-	public void initializeRouterHooks(final RoutingEngine engine) {
-		port = engine.getPort();
-		address = engine.getAddress();
+	public void initializeRouterHooks(final RoutingEngine router) {
+		port = router.getPort();
+		address = router.getAddress();
 		final DistributedGroup group = getAtomix().getGroup(BROADCAST_GROUP).join();
 		Node localNode = new Node(address, port, address + ":" + port);
-		localNode.setWriter(new LocalWriter(engine.getEngine()));
-		engine.nodeAdded(localNode);
+		localNode.setWriter(new LocalWriter(engine));
+		router.nodeAdded(localNode);
 		if (isBootstrap()) {
 			// track nodes only if this node is the master
 			group.onJoin(new Consumer<GroupMember>() {
@@ -101,7 +104,7 @@ public class AtomixConnector extends ClusterConnector {
 								.compressorRegistry(CompressorRegistry.getDefaultInstance()).usePlaintext(true).build();
 						Node node = new Node(split[0], Integer.parseInt(split[1]), t.id());
 						node.setWriter(new GRPCWriter(channel));
-						engine.nodeAdded(node);
+						router.nodeAdded(node);
 					}
 				}
 			});
@@ -114,7 +117,7 @@ public class AtomixConnector extends ClusterConnector {
 						logger.info("Non-local node found:" + t.id());
 						String[] split = t.id().split(":");
 						Node node = new Node(split[0], Integer.parseInt(split[1]), t.id());
-						engine.nodeAdded(node);
+						router.nodeAdded(node);
 					}
 				}
 			});
@@ -138,6 +141,11 @@ public class AtomixConnector extends ClusterConnector {
 	@Override
 	public int getClusterSize() throws Exception {
 		return getAtomix().getGroup(BROADCAST_GROUP).join().members().size();
+	}
+
+	@Override
+	public StorageEngine getEngine() {
+		return engine;
 	}
 
 }
