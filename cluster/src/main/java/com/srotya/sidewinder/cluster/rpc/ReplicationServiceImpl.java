@@ -44,6 +44,43 @@ public class ReplicationServiceImpl extends ReplicationServiceImplBase {
 	}
 
 	@Override
+	public void batchFetchTimeseriesDataAtOffset(BatchRawTimeSeriesOffsetRequest req,
+			StreamObserver<BatchRawTimeSeriesOffsetResponse> responseObserver) {
+		com.srotya.sidewinder.cluster.rpc.BatchRawTimeSeriesOffsetResponse.Builder responseBuilder = BatchRawTimeSeriesOffsetResponse
+				.newBuilder();
+		responseBuilder.setMessageId(req.getMessageId());
+		for (RawTimeSeriesOffsetRequest request : req.getRequestsList()) {
+			try {
+				if (engine.checkTimeSeriesExists(request.getDbName(), request.getMeasurementName(),
+						request.getValueFieldName(), new ArrayList<>(request.getTagsList()))) {
+					TimeSeries timeSeries = engine.getTimeSeries(request.getDbName(), request.getMeasurementName(),
+							request.getValueFieldName(), new ArrayList<>(request.getTagsList()));
+					Iterator<Entry<String, TimeSeriesBucket>> itr = timeSeries
+							.getSeriesBuckets(TimeUnit.MILLISECONDS, request.getBlockTimestamp()).entrySet().iterator();
+					ByteBuffer rawBytes = itr.next().getValue().getWriter().getRawBytes();
+					RawTimeSeriesOffsetResponse.Builder response = RawTimeSeriesOffsetResponse.newBuilder()
+							.setDbName(request.getDbName()).setMeasurementName(request.getMeasurementName())
+							.setValueFieldName(request.getValueFieldName()).addAllTags(request.getTagsList())
+							.setOffset(request.getOffset());
+					if (request.getOffset() < rawBytes.limit()) {
+						rawBytes.position(request.getOffset());
+						ByteString str = bufToByteString(rawBytes);
+						response.setData(str);
+					}
+					if (itr.hasNext()) {
+						response.setNextTimestamp(itr.next().getValue().getHeaderTimestamp());
+					}
+					responseBuilder.addResponses(response.build());
+				}
+			} catch (Exception e) {
+				responseObserver.onError(e);
+			}
+		}
+		responseObserver.onNext(responseBuilder.build());
+		responseObserver.onCompleted();
+	}
+
+	@Override
 	public void fetchTimeseriesDataAtOffset(RawTimeSeriesOffsetRequest request,
 			StreamObserver<RawTimeSeriesOffsetResponse> responseObserver) {
 		try {
@@ -66,6 +103,8 @@ public class ReplicationServiceImpl extends ReplicationServiceImplBase {
 				if (itr.hasNext()) {
 					response.setNextTimestamp(itr.next().getValue().getHeaderTimestamp());
 				}
+				responseObserver.onNext(response.build());
+				responseObserver.onCompleted();
 			}
 		} catch (Exception e) {
 			responseObserver.onError(e);

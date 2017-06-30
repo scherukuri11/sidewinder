@@ -35,6 +35,10 @@ service ClusteredWriteService {
 
 service ReplicationService {
 
+	rpc FetchDBMetadata(DBMetadataRequest) returns (DBMetadataResponse) {}
+	
+	rpc FetchMeasurementMetadata(MeasurementMetadataRequest) returns (MeasurementMetadataResponse) {}
+
 	rpc ReadTimeseriesBucket (RawTimeSeriesBucketRequest) returns (RawTimeSeriesBucketResponse) {}
 	
 	rpc FetchTimeseriesDataAtOffset (RawTimeSeriesOffsetRequest) returns (RawTimeSeriesOffsetResponse) {}
@@ -43,6 +47,51 @@ service ReplicationService {
 
 }
 
+message DBMetadataRequest {
+
+	int64 messageId = 1;
+	repeated string databases = 2;
+
+}
+
+message DBMetadataResponse {
+
+	int64 messageId = 1;
+	repeated DBMetadata metadata = 2;
+
+}
+
+message DBMetadata {
+
+	string dbName = 1;
+	int32 retentionPolicy = 2;
+	repeated string measurement = 3;
+
+}
+
+message MeasurementMetadata {
+
+	string dbName = 1;
+	string measurementName = 2;
+	int32 retentionPolicy = 3;
+	repeated string valueFieldNames = 4;
+	repeated string tags = 5;
+
+}
+
+message MeasurementMetadataRequest {
+
+	int64 messageId = 1;
+	repeated DBMetadata metadata = 2;
+
+}
+
+message MeasurementMetadataResponse {
+
+	int64 messageId = 1;
+	repeated MeasurementMetadata metadata = 2;
+
+}
 
 message RawTimeSeriesBucketResponse {
 	
@@ -68,7 +117,7 @@ message BatchRawTimeSeriesOffsetRequest {
 message BatchRawTimeSeriesOffsetResponse {
 
 	int64 messageId = 1;
-	repeated RawTimeSeriesOffsetRequest responses = 2;
+	repeated RawTimeSeriesOffsetResponse responses = 2;
 
 }
 
@@ -82,12 +131,6 @@ message RawTimeSeriesOffsetRequest {
 	int32 timeBucketSize = 6;
 	repeated string tags = 7;
 	int32 offset = 8;
-
-}
-
-message RawTimeSeriesResponse {
-	
-	
 
 }
 
