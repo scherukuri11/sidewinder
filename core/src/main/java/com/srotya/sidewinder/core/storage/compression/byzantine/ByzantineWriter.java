@@ -136,9 +136,7 @@ public class ByzantineWriter implements Writer {
 		compressAndWriteTimestamp(buf, timestamp);
 		compressAndWriteValue(buf, value);
 		count++;
-		// if (onDisk) {
 		updateCount();
-		// }
 	}
 
 	private void compressAndWriteValue(ByteBuffer tBuf, long value) {
@@ -219,8 +217,8 @@ public class ByzantineWriter implements Writer {
 			configure(conf);
 		}
 		ByteBuffer rbuf = buf.duplicate();
-		rbuf.rewind();
 		read.unlock();
+		rbuf.rewind();
 		reader = new ByzantineReader(rbuf);
 		return reader;
 	}

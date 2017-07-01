@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,7 +49,6 @@ import com.srotya.sidewinder.core.storage.StorageEngine;
 import com.srotya.sidewinder.core.storage.mem.Archiver;
 import com.srotya.sidewinder.core.storage.mem.TimeSeries;
 import com.srotya.sidewinder.core.storage.mem.archival.NoneArchiver;
-import com.srotya.sidewinder.core.utils.BackgrounThreadFactory;
 import com.srotya.sidewinder.core.utils.MiscUtils;
 
 /**
@@ -112,24 +110,22 @@ public class DiskStorageEngine implements StorageEngine {
 		compressionFQCN = conf.getOrDefault(MEM_COMPRESSION_CLASS,
 				"com.srotya.sidewinder.core.storage.compression.byzantine.ByzantineWriter");
 
-		Executors.newSingleThreadScheduledExecutor(new BackgrounThreadFactory("sidewinder-gc"))
-				.scheduleAtFixedRate(() -> {
-					for (Entry<String, Map<String, SortedMap<String, TimeSeries>>> measurementMap : databaseMap
-							.entrySet()) {
-						// String db = measurementMap.getKey();
-						for (Entry<String, SortedMap<String, TimeSeries>> measurementEntry : measurementMap.getValue()
-								.entrySet()) {
-							// String measurement = measurementEntry.getKey();
-							for (Entry<String, TimeSeries> entry : measurementEntry.getValue().entrySet()) {
-								try {
-									entry.getValue().collectGarbage();
-								} catch (IOException e) {
-									logger.log(Level.SEVERE, "Error collecing garbage", e);
-								}
-							}
+		bgTaskPool.scheduleAtFixedRate(() -> {
+			for (Entry<String, Map<String, SortedMap<String, TimeSeries>>> measurementMap : databaseMap.entrySet()) {
+				// String db = measurementMap.getKey();
+				for (Entry<String, SortedMap<String, TimeSeries>> measurementEntry : measurementMap.getValue()
+						.entrySet()) {
+					// String measurement = measurementEntry.getKey();
+					for (Entry<String, TimeSeries> entry : measurementEntry.getValue().entrySet()) {
+						try {
+							entry.getValue().collectGarbage();
+						} catch (IOException e) {
+							logger.log(Level.SEVERE, "Error collecing garbage", e);
 						}
 					}
-				}, 500, 60, TimeUnit.SECONDS);
+				}
+			}
+		}, 500, 60, TimeUnit.SECONDS);
 
 		loadDatabases();
 	}
@@ -744,7 +740,7 @@ public class DiskStorageEngine implements StorageEngine {
 				}
 			}
 		}
-		System.gc();
+		logger.info("All series buffers have been closed");
 	}
 
 	@Override

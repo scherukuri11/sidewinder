@@ -20,6 +20,9 @@ import java.io.IOException;
 import com.srotya.sidewinder.core.storage.TimeSeriesBucket;
 import com.srotya.sidewinder.core.storage.disk.BucketEntry;
 
+/**
+ * @author ambud
+ */
 public class BucketEntry {
 
 	private BucketEntry next, prev;

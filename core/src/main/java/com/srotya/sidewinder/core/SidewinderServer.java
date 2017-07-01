@@ -16,12 +16,14 @@
 package com.srotya.sidewinder.core;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.codahale.metrics.Metric;
@@ -86,22 +88,39 @@ public class SidewinderServer extends Application<SidewinderConfig> {
 		env.healthChecks().register("restapi", new RestAPIHealthCheck());
 
 		@SuppressWarnings("resource")
-		SidewinderDropwizardReporter reporter = new SidewinderDropwizardReporter(registry, "request", new MetricFilter() {
+		SidewinderDropwizardReporter reporter = new SidewinderDropwizardReporter(registry, "request",
+				new MetricFilter() {
 
-			@Override
-			public boolean matches(String name, Metric metric) {
-				return true;
-			}
-		}, TimeUnit.SECONDS, TimeUnit.SECONDS, storageEngine);
+					@Override
+					public boolean matches(String name, Metric metric) {
+						return true;
+					}
+				}, TimeUnit.SECONDS, TimeUnit.SECONDS, storageEngine);
 		reporter.start(1, TimeUnit.SECONDS);
 
-		NettyHTTPIngestionServer server = new NettyHTTPIngestionServer();
-		server.init(storageEngine, conf, registry);
-		server.start();
+		if (Boolean.parseBoolean(conf.getOrDefault("server.netty.http.enabled", "false"))) {
+			NettyHTTPIngestionServer server = new NettyHTTPIngestionServer();
+			server.init(storageEngine, conf, registry);
+			server.start();
+		}
 
-		NettyBinaryIngestionServer binServer = new NettyBinaryIngestionServer();
-		binServer.init(storageEngine, conf);
-		binServer.start();
+		if (Boolean.parseBoolean(conf.getOrDefault("server.netty.binary.enabled", "false"))) {
+			NettyBinaryIngestionServer binServer = new NettyBinaryIngestionServer();
+			binServer.init(storageEngine, conf);
+			binServer.start();
+		}
+
+		Runtime.getRuntime().addShutdownHook(new Thread("shutdown-thread") {
+			@Override
+			public void run() {
+				try {
+					logger.info("Storage engine shutdown started");
+					storageEngine.disconnect();
+				} catch (IOException e) {
+					logger.log(Level.SEVERE, "Storage engine shutdown failure", e);
+				}
+			}
+		});
 	}
 
 	/**
