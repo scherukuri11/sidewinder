@@ -3,7 +3,7 @@ This section documents how queries can be executed against Sidewinder to allows 
 
 ## APIs
 
-## Time Series Query Language (TSQL) - [Not Released]
+## Time Series Query Language (TSQL) - [0.0.22 or above]
 Sidewinder introduces a new simplified query language designed for querying time series data. The syntax is easy and to the point and uses symbols to express the concepts of query. Let's understand the detailed syntax of the language.
 
 ``

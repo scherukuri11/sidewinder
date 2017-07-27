@@ -1,4 +1,4 @@
-# Configure 
+# Configure
 This page documents different configuration options for Sidewinder and also familiarize users with different configuration files Sidewinder needs to operate.
 
 ## Files
@@ -24,5 +24,10 @@ This file is the actual configuration file for almost everything in Sidewinder. 
 |data.dir|Directory of series metadata and data|/tmp/sidewinder/metadata||
 |index.dir|Directory of index data|/tmp/sidewinder/index||
 |default.series.retention.hours |Number of hours time series are retained before collecting garbage|28||
+|default.bucket.size|Size of each timeseries bucket in seconds|4096|Max 2 billion|
+
+```
+Note: default.bucket.size should be adjusted based on frequency of data points in for given time series. The maximum size of the bucket is 2GB which is limited by the size of the memory mapped byte buffer. 2GB translates to 134,217,728 uncompressed data points. Currently this is can be configured at server level only and not per database or measurement. Also the bigger the bucket, the slower the reads (relative) since currently the entire bucket must be scanned to filter data points.
+```
 
 ### Server Settings
